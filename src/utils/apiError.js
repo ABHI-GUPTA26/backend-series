@@ -5,7 +5,7 @@ class apiError extends error{
          statusCode,
          message="something went wrong",
          errors=[],// if you want to send array of error 
-         statck=""
+         stack=""
    ){   
           super(message),
        this.statusCode=statusCode,
@@ -13,8 +13,8 @@ class apiError extends error{
          this.errors=errors,
          this.data=null,
          this.success=true
-         if(statck){
-            this.stack=statck
+         if(stack){
+            this.stack=stack
 
          }else{
             Error.captureStackTrace(this,this.constructor)
