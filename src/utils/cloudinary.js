@@ -27,3 +27,4 @@ cloudinary.config({
 
     }
   }
+   export {cloudinaryFileUpload}

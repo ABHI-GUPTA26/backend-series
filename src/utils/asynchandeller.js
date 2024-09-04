@@ -1,7 +1,8 @@
        ///promise resolve method
-const asynchandler=(requesthandler)=>(req,res,next)=>{
+const asynchandler=(requesthandler)=>{
+    return (req,res,next)=>{
     Promise.resolve(requesthandler(req,res,next)).catch((err)=>next(err))
-}
+}}
 
       /// this try and catch method both are usedin production 
 /*const asynchandler=(func)=>async(err,req,res,next)=>{
