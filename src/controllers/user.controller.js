@@ -27,25 +27,35 @@ const userRegister= asynchandler(async (req,res)=>{
       }  
   ///check  if already exist or not
       
-  const userExist=  User.findOne(
+  const userExist=  await User.findOne(
    {
       $or:[{userName},{email}]
    }
   )
+  //console.log(userExist);
 
     if(userExist){
        throw new apiError(409,"userName or eamil is already exist !");
     }
    //  check for images   /check for avtar
-        const avatarLocalPath=req.files?.avatar[0]?.path
-        const coverImageLocalPath=req.files?.avatar[0]?.path
+        const avatarLocalPath=req.files?.avtar[0]?.path
+        let coverImageLocalPath;
+        if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+            coverImageLocalPath = req.files.coverImage[0]?.path
+        }
+         
+        console.log(req.files)
         if(!avatarLocalPath){
          throw new apiError(400,"avatar file is required !")
         }
+
+       // console.log(avatarLocalPath)
+        
         //upload on cloudinary avatar and coverimage
 
        const avatar= await cloudinaryFileUpload(avatarLocalPath)
-       const coverImage= await cloudinaryFileUpload(coverImageLocalPath)
+       //console.log(avatar)
+        const coverImage= await cloudinaryFileUpload(coverImageLocalPath)
           if(!avatar){
             throw new apiError(400,"avatar file is required !")
           }
@@ -53,7 +63,7 @@ const userRegister= asynchandler(async (req,res)=>{
           const user=await User.create({
               fullName,
               avatar:avatar.url,
-              coverImage:coverImage?.url||"",
+               coverImage:coverImage?.url||"",
               email,
               userName:userName.toLowerCase(),
               password
